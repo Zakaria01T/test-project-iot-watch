@@ -64,7 +64,7 @@ def test_register_duplicate_email(client, test_db):
         app.get_db_connection = lambda: test_db
 
 
-        # Try to register same email
+        # Try to register same email (duplicate email)
         data = {
             "email": "zak@gmail.com",  # Duplicate
             "password": "newpass123",

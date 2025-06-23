@@ -17,7 +17,7 @@ def test_login_utilisateur_not_exist(client, test_db):
 
         app.get_db_connection_user = mock_get_db
         
-        # Now, test the login
+        # Now, test the login with email and password
         login_data = {
             "email": "zdfqsfqf@gmail.com",
             "password": "secure1234"

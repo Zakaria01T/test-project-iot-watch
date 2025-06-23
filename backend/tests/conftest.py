@@ -14,7 +14,7 @@ def client():
 
 @pytest.fixture
 def test_db():
-    # Create an in-memory SQLite DB with schema
+    # Create an in-memory SQLite DB 
     conn = sqlite3.connect(":memory:")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
