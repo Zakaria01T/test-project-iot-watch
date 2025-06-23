@@ -27,7 +27,7 @@ def test_login_utilisateur_not_exist(client, test_db):
             data=json.dumps(login_data),
             content_type='application/json'
         )
-        print(response.data)
+        # print(response.data)
         assert response.status_code == 404
         assert json.loads(response.data)["message"] == "User not exist"
 

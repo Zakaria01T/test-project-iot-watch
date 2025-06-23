@@ -77,7 +77,6 @@ def get_current_temperature():
 
 def update_all_predictions():
     from app import predict_for_day
-
     """
     Update all predictions for the next 5 days.
     This completely refreshes the predictions table daily.

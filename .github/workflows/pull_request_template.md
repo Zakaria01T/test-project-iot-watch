@@ -31,6 +31,6 @@ Add any other context or screenshots here.
 
 ![Tests OK](all_passed_test.png)
 
-![Login user](user_login.jpg)
+![Login user with jwt](user_login.jpg)
 
 ![security routes](security_routes.jpg)
