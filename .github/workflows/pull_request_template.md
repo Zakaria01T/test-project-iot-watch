@@ -29,6 +29,8 @@ Fixes # (Authentification Setup)
 
 Add any other context or screenshots here.
 
-![alt text](all_passed_test.png)
+![Tests OK](all_passed_test.png)
 
-![alt text](user_login_with_token.png)
+![Login user](user_login_with_token.png)
+
+![security routes](security_routes.png)
