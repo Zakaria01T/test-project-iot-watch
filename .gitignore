@@ -2,3 +2,5 @@
 __pycache__/
 *.pyc
 
+# Ignorer les bases de données SQLite
+temperature.db
