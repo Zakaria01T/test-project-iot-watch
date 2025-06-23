@@ -31,6 +31,6 @@ Add any other context or screenshots here.
 
 ![Tests OK](all_passed_test.png)
 
-![Login user](user_login_with_token.jpg)
+![Login user](user_login.jpg)
 
 ![security routes](security_routes.jpg)
