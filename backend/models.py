@@ -9,6 +9,7 @@ from flask import current_app, has_app_context
 BASE_TEMP = 25.0
 DEFAULT_LATITUDE = 30.4202
 DEFAULT_LONGITUDE = -9.5982
+
 # Crée un UUID unique
 def get_uuid():
     return uuid.uuid4().hex

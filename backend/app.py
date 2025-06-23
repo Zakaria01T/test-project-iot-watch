@@ -110,6 +110,7 @@ def run_background_services():
 @app.route('/api/latest', methods=['GET'])
 @token_required
 def get_latest_temperature(current_user):
+    
     """Get the latest temperature reading and current hour's average"""
     latitude = request.args.get('latitude', DEFAULT_LATITUDE)
     longitude = request.args.get('longitude', DEFAULT_LONGITUDE)
