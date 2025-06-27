@@ -1,10 +1,20 @@
-import React from 'react';
-
+import React,{useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 /* Components */
 import Header from '../components/Header';
 import HumidityChart from '../components/HumidityChart';
 
 function Home(){
+  
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirige vers la page de login si aucun token
+      navigate('/login');
+    }
+  }, [navigate]); 
+
     return(
         <div className="w-screen max-w-screen min-h-screen bg-zinc-50 flex flex-col">
             <Header />

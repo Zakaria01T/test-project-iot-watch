@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { API_BASE_URL } from '../config';
 
@@ -36,7 +37,14 @@ const TemperaturePrediction = () => {
       console.log(`Fetching predictions from: ${API_BASE_URL}/api/predict?day=${predictionDay}`);
       setDebugInfo(`Attempting to fetch from: ${API_BASE_URL}/api/predict?day=${predictionDay}`);
       
-      const response = await fetch(`${API_BASE_URL}/api/predict?day=${predictionDay}`);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_BASE_URL}/api/predict`, {
+        params: { day: predictionDay },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      // const response = await fetch(`${API_BASE_URL}/api/predict?day=${predictionDay}`);
       
       if (!response.ok) {
         const errorText = await response.text();

@@ -50,7 +50,7 @@ const Content = () => {
   const getTemperatureHistory = async () => {
     try {
       const data = await fetchTemperatureHistory();
-
+      console.log("Temperature history data: ", data);
       setTemperatureData({
         labels: data.lastTimestamps,
         datasets: [
