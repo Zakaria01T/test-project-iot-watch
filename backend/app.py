@@ -52,6 +52,7 @@ def token_required(func):
             return jsonify({"message": "You need to login"}), 401
 
         try:
+            print("token:", token)
             # Decode the JWT using the application's secret key and the HS256 algorithm
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
             current_user = get_user_by_email(data['email'])
@@ -127,7 +128,8 @@ def get_latest_temperature(current_user):
         ''', (latitude, longitude))
         
         latest = cursor.fetchone()
-        
+        print("-------------------------------------")
+
         if not latest:
             current_temp = get_current_temperature()
             return jsonify({
@@ -617,11 +619,12 @@ def register_user():
         data = request.get_json()
         
         # Validation des entrées
+        print(data)
         required_fields = ['email', 'password', 'first_name', 'last_name']
-        if not all(field in data for field in required_fields):
+        if not all(data.get(field, '').strip() for field in required_fields):
             return jsonify({
                 "success": False,
-                "error": "Missing fields"
+                "message": "Missing fields"
             }), 400
 
         email = data['email']
@@ -633,21 +636,21 @@ def register_user():
         if not email or '@' not in email:
             return jsonify({
                 "success": False,
-                "error": "Invalid email format"
+                "message": "Invalid email format"
             }), 400
             
         # Validation du mot de passe
         if len(password) < 8:
             return jsonify({
                 "success": False,
-                "error": "Le mot de passe doit contenir au moins 8 caractères"
+                "message": "Le mot de passe doit contenir au moins 8 caractères"
             }), 400
 
         # Vérifier si l'email existe déjà
         if email_exists(email) :
             return jsonify({
                 "success": False,
-                "error": "Email already exists"
+                "message": "Email already exists"
             }), 400
             
         # Hachage du mot de passe
@@ -667,7 +670,7 @@ def register_user():
     except Exception as e:
         return jsonify({
             "success": False,
-            "error": f"Erreur serveur: {str(e)}"
+            "message": f"Erreur serveur: {str(e)}"
         }), 500
     finally:
         if conn:
@@ -682,12 +685,12 @@ def login_user():
           return jsonify({"message": "Please provide your credentials"}), 401 
         elif request.method == "POST":
           data = request.get_json()
-          
+          print(f"Received data: {data}")
           # Validation de base
-          if not data or 'email' not in data or 'password' not in data:
+          if not data or data["email"] == "" or data["password"] == "":
               return jsonify({
                   "success": False,
-                  "error": "Email et mot de passe requis"
+                  "message": "Email et mot de passe requis"
               }), 400
 
           email = data["email"]
@@ -697,7 +700,7 @@ def login_user():
           if not email or '@' not in email:
               return jsonify({
                   "success": False,
-                  "error": "Format d'email invalide"
+                  "message": "Format d'email invalide"
               }), 400
 
           # Récupération de l'utilisateur
@@ -707,10 +710,8 @@ def login_user():
             if not bycrypt.check_password_hash(user['password'], password):
               return jsonify({
                   "message":"your crendentials are wrong",
-                  "password_of_user":user['password'] ,
-                  "password_provided":password,
-                  "egale" : bycrypt.check_password_hash(user['password'], password)
-                  })
+                  "success": False
+                  }),401
 
             # Authentification réussie
             session['logged_in'] = True
@@ -719,13 +720,16 @@ def login_user():
                 'exp': datetime.utcnow() + timedelta(hours=1)
             }, app.config['SECRET_KEY'], algorithm='HS256')
           
-            return jsonify({'token':token,"message":"Login successful"}),200
+            return jsonify({'token':token,"message":"Login successful","success": True}),200
           
-          return jsonify({"message": "User not exist"}), 404
+          return jsonify({
+              "success": False,
+              "message": "User not exist"
+              }), 401
     except Exception as e:
       return jsonify({
           "success": False,
-          "error": f"Erreur serveur: {str(e)}"
+          "message": f"Erreur serveur: {str(e)}"
       }), 500
 
 @app.route('/api/logout', methods=['POST'])
@@ -749,7 +753,7 @@ def public():
 def auth(current_user):  # Add this parameter
     return jsonify({
         "message": "JWT verified welcome to your dashboard",
-        "user": current_user['email']  # Example of using the user info
+        "data": current_user["email"]  # Example of using the user info
     })
 
 if __name__ == "__main__":

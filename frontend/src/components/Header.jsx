@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiSun, FiMoon } from 'react-icons/fi';
+import { FiSun, FiMoon, FiLogOut } from 'react-icons/fi';
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
-function Header() {
+import {API_BASE_URL} from '../config';
+function Header() { 
     const [menuOpen, setMenuOpen] = useState(false);
     const [dark, setDark] = useState(() => {
         if (localStorage.getItem("theme")) {
@@ -20,6 +23,27 @@ function Header() {
             localStorage.setItem("theme", "light");
         }
     }, [dark]);
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.post(`${API_BASE_URL}/api/logout`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      // Supprimer le token et rediriger
+      localStorage.removeItem("token");
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+    };
 
     return (
         <header className="w-full bg-white shadow">
@@ -46,18 +70,23 @@ function Header() {
                 </ul>
                 {/* Buttons and light mode/dark mode toggle */}
                 <div className="hidden md:flex flex-row space-x-4 flex-1 justify-end items-center">
-                    <button className="bg-green-500 rounded-b-xl text-white px-4 py-2"><span>Say Hello!</span></button>
-                    <button className="bg-green-400 rounded-b-xl text-white px-4 py-2"><span>Contact Us!</span></button>
+                    <input type="button" className="bg-green-500 rounded-b-xl text-white px-4 py-2" value={"Say Hello!"} />
+                    <input type="button" className="bg-green-400 rounded-b-xl text-white px-4 py-2" value={"Contact Us!"} />
+                    {/* <button className="bg-green-500 rounded-b-xl text-white px-4 py-2"><span>Say Hello!</span></button> */}
+                    {/* <button className="bg-green-400 rounded-b-xl text-white px-4 py-2"><span>Contact Us!</span></button> */}
                     <button
                         className="ml-2 p-2 rounded-full border-2 border-green-500 text-green-500 hover:bg-green-50 transition"
                         onClick={() => setDark((d) => !d)}
                         aria-label="Toggle dark mode"
-                    >
+            >
                         {dark
                             ? <FiSun size={22} />
                             : <FiMoon size={22} />
+
                         }
                     </button>
+            <button onClick={handleLogout} className='text-green-300'><FiLogOut size={22} /></button>
+                    
                 </div>
             </div>
             {/* Mobile menu */}

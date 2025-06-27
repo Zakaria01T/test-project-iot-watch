@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { Line, Bar } from 'react-chartjs-2';
 import { API_BASE_URL } from '../config';
+import axios from 'axios';
 
 // Register ChartJS components
 ChartJS.register(
@@ -36,8 +37,13 @@ const WeeklyStats = () => {
       setLoading(true);
       console.log(`Fetching weekly stats from: ${API_BASE_URL}/api/weekly-stats`);
       setDebugInfo(`Attempting to fetch from: ${API_BASE_URL}/api/weekly-stats`);
-      
-      const response = await fetch(`${API_BASE_URL}/api/weekly-stats`);
+      const token = localStorage.getItem("token");
+      const response = axios.get(`${API_BASE_URL}/api/weekly-stats`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      // const response = await fetch(`${API_BASE_URL}/api/weekly-stats`);
       
       if (!response.ok) {
         const errorText = await response.text();

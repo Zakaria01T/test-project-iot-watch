@@ -39,7 +39,7 @@ def get_current_temperature():
                     ''', (timestamp, current_temp, DEFAULT_LATITUDE, DEFAULT_LONGITUDE))
                     
                     conn.commit()
-                    print(f"[{timestamp}] Temperature stored: {current_temp:.2f}°C")
+                    #print(f"[{timestamp}] Temperature stored: {current_temp:.2f}°C")
                     
                     # Get the last 10 readings for this hour
                     cursor.execute('''
@@ -54,7 +54,7 @@ def get_current_temperature():
                     recent_readings = cursor.fetchall()
                     if recent_readings:
                         avg_temp = sum(r['temperature'] for r in recent_readings) / len(recent_readings)
-                        print(f"Current hour average: {avg_temp:.2f}°C from {len(recent_readings)} readings")
+                        #print(f"Current hour average: {avg_temp:.2f}°C from {len(recent_readings)} readings")
                     
                 except sqlite3.OperationalError as e:
                     if "database is locked" in str(e):
